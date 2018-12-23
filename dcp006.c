@@ -11,80 +11,63 @@ you can assume you have access to get_pointer and dereference_pointer functions 
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <inttypes.h>
+
 
 typedef struct Node {
     int val;
     struct Node* both;
 } Node;
 
-typedef struct {
-    Node *head;
-    Node *tail;
-    int size;
-} XORLinkedList;
 
-Node *new_node(int val)
+Node* xor(Node *a, Node *b)
 {
-    Node *node = calloc(1, sizeof(node));
-    node->val = val;
-    return node;
+  return (Node *)((uintptr_t) (a) ^ (uintptr_t)(b));
 }
 
-XORLinkedList *new_linked_list()
-{
-    XORLinkedList *ll = calloc(1, sizeof(XORLinkedList));
-    ll->size = 0;
-    return ll;
-}
 
-void add(XORLinkedList *ll, int element)
+Node* add(Node **head_ref, int element)
 {
-    Node *node = new_node(element);
-    if (ll->size == 0) {
-        ll->head = node;
-        ll->tail = node;
-    } else {
-        ll->head->both = node;
-        ll->head = node;
-    }
-    
-    ll->size++;
-}
+  Node *new_node = (Node *)malloc(sizeof(Node));
+  new_node->val = element;
 
-int get(XORLinkedList *ll, int index)
-{
-    if (index >= ll->size) {
-        fprintf(stderr, "Out of index: index=%d size=%d", index, ll->size);
-        exit(1);
-    }
-    
-    Node *node = ll->tail;
-    for (int i=0; i<index; i++) {
-        node = node->both;
-    }
-    
-    return node->val;
-}
-
-void check(int actual, int expected)
-{
-  if (actual != expected) {
-    fprintf(stderr, "Expected %d, but got %d\n", expected, actual);
-    exit(1);
+  if (*head_ref != NULL) {
+    Node *prev = xor((*head_ref)->both, NULL);
+    (*head_ref)->both = xor(prev, new_node);
+    new_node->both = xor(*head_ref, NULL);
   }
 
-  printf("OK\n");
+  *head_ref = new_node;
+  return new_node;
 }
 
-int main(void){
-    XORLinkedList *ll = new_linked_list();
-    add(ll, 10);
-    add(ll, 20);
-    add(ll, 30);
-    add(ll, 40);
-    add(ll, 50);
+int get(Node *head, int index)
+{
+  int i;
+  Node *prev = NULL;
+  Node *curr = head;
+  Node *next;
+  for (i = 0; i < index; i++) {
+    next = xor(prev, curr->both);
+    prev = curr;
+    curr = next;
+  }
 
-    check(get(ll, 0), 10);
-    check(get(ll, 2), 30);
-    check(get(ll, 4), 50);
+  return curr->val;
+}
+
+
+int main()
+{
+  Node *head = NULL;
+  Node *tail = NULL;
+  tail = add(&head, 10);
+  add(&head, 20);
+  add(&head, 30);
+  add(&head, 40);
+
+  for (int i=0; i<4; i++) {
+    printf("index %d = %d\n", i, get(tail, i));
+  }
+  return 0;
 }

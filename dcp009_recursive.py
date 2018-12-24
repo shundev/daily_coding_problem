@@ -15,10 +15,14 @@ def largest_sum(s: [int]) -> int:
   if l == 2:
     return s[0] if s[0] > s[1] else s[1]
   if l == 3:
-    return s[1] if s[1] > s[0] + s[2] else s[0] + s[2]
+    take_none = largest_sum(s[2:])
+    take_0 = s[0] + largest_sum(s[2:])
+    take_1 = s[1]
+    return max([take_none, take_0, take_1])
+  take_none = largest_sum(s[2:])
   take_0 = s[0] + largest_sum(s[2:])
   take_1 = s[1] + largest_sum(s[3:])
-  return take_0 if take_0 > take_1 else take_1
+  return max([take_none, take_0, take_1])
 
 
 def check(act, exp):
@@ -36,4 +40,5 @@ if __name__ == "__main__":
   check(largest_sum([1, -1, 1, 2, 3]), 5)
 
   check(largest_sum([2, 4, 6, 2, 5]), 13)
+  check(largest_sum([-2, -4, -6, -2, 1]), 1)
   check(largest_sum([5, 1, 1, 5]), 10)

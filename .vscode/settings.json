@@ -1,0 +1,9 @@
+{
+    "python.linting.flake8Enabled": true,
+    "python.formatting.provider": "yapf",
+    "python.linting.mypyEnabled": true,
+    "[python]": {
+      "editor.formatOnSave": true
+    }
+  }
+  

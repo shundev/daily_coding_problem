@@ -1,5 +1,4 @@
 from typing import List
-from queue import Queue
 """
 This problem was asked by Twitter.
 

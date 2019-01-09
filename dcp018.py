@@ -1,4 +1,5 @@
 from typing import List, Generator
+from collections import deque
 """
 This problem was asked by Google.
 
@@ -19,14 +20,25 @@ You can simply print them out as you compute them.
 
 
 def solution(arr: List[int], k: int) -> Generator[int, None, None]:
-    i = 0
-    while i + k - 1 < len(arr):
-        max_ = arr[i]
-        for j in range(i + 1, i + k):
-            if arr[j] > max_:
-                max_ = arr[j]
-        yield max_
-        i += 1
+    q: deque = deque()
+    n = len(arr)
+
+    for i in range(k):
+        while q and arr[i] > arr[q[-1]]:
+            q.pop()
+        q.append(i)
+
+    for i in range(k, n):
+        yield arr[q[0]]
+
+        if q[0] < i - k + 1:
+            q.popleft()
+
+        while q and arr[i] > arr[q[-1]]:
+            q.pop()
+        q.append(i)
+
+    yield arr[q[0]]
 
 
 def check(actual: List[int], expected: List[int]):

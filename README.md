@@ -22,3 +22,5 @@ Subscribe e-mail magazine from the link below to see all the problems.
 1. [day 16](/dcp016.py)
 1. [day 17](/dcp017.py)
 1. [day 18](/dcp018.py)
+1. [day 19](/dcp019.py)
+1. [day 19](/dcp019_bottomup.py)

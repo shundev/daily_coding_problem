@@ -7,27 +7,6 @@ He has a goal of minimizing cost while ensuring that no two neighboring houses a
 
 Given an N by K matrix where the nth row and kth column represents the cost
 to build the nth house with kth color, return the minimum cost which achieves this goal.
-
-[
-    [1]
-]
-
-> 1
-
-[
-    [1, 2],
-    [1, 2],
-]
-
-> 1 + 2 = 3
-
-[
-    [1, 2],
-    [100, 150],
-    [300, 20],
-]
-
-> max(1 + 150 + 300, 2 + 100 + 20) = 122
 """
 
 
@@ -90,8 +69,7 @@ if __name__ == "__main__":
     m4 = [[4, 0, 3], [8, 3, 8], [4, 5, 0], [3, 4, 4], [8, 8, 0]]
     ans4 = 9
 
-    for _ in range(5000):
-        check(solution(m1), ans1)
-        check(solution(m2), ans2)
-        check(solution(m3), ans3)
-        check(solution(m4), ans4)
+    check(solution(m1), ans1)
+    check(solution(m2), ans2)
+    check(solution(m3), ans3)
+    check(solution(m4), ans4)

@@ -7,29 +7,24 @@ fstart_ind the mstart_instart_imum number of rooms requstart_ired.
 For example, gstart_iven [(30, 75), (0, 50), (60, 150)], you should return 2.
 """
 
-from typing import List
+from typing import List, Tuple
 
 
-def solution(start: List[int], end: List[int], n: int) -> int:
-    start.sort()
-    end.sort()
+def solution(intervals: List[Tuple[int, int]]) -> int:
+    # False -> start, True -> end
+    timeline: List[Tuple[int, bool]] = []
+    for start, end in intervals:
+        timeline.extend([(start, False), (end, True)])
+    timeline.sort(key=lambda x: x[0])
 
-    current_classes = 1
-    result = 1
-    start_i = 1
-    end_i = 0
+    current_classes = 0
+    max_classes = 0
+    for _, is_end in timeline:
+        current_classes += -1 if is_end else 1
+        if current_classes > max_classes:
+            max_classes = current_classes
 
-    while start_i < n and end_i < n:
-        if start[start_i] < end[end_i]:
-            current_classes += 1
-            start_i += 1
-
-            if current_classes > result:
-                result = current_classes
-        else:
-            current_classes -= 1
-            end_i += 1
-    return result
+    return max_classes
 
 
 def check(actual: int, expected: int):
@@ -38,15 +33,17 @@ def check(actual: int, expected: int):
 
 
 if __name__ == "__main__":
-
-    intvl1 = [(10, 50), (20, 30), (60, 100), (70, 90)]
-    start1 = [s for s, e in intvl1]
-    end1 = [e for s, e in intvl1]
+    interval1 = [(10, 50), (20, 30), (60, 100), (70, 90)]
     ans1 = 2
-
-    start2 = [30, 0, 60]
-    end2 = [75, 50, 150]
+    interval2 = [(30, 57), (0, 50), (60, 150)]
     ans2 = 2
+    interval3 = [(0, 50), (50, 100)]
+    ans3 = 1
+    interval4 = [(900, 910), (940, 1200), (950, 1120), (1100, 1130),
+                 (1500, 1900), (1800, 2000)]
+    ans4 = 3
 
-    check(solution(start1, end1, len(start1)), ans1)
-    check(solution(start2, end2, len(start2)), ans2)
+    check(solution(interval1), ans1)
+    check(solution(interval2), ans2)
+    check(solution(interval3), ans3)
+    check(solution(interval4), ans4)
